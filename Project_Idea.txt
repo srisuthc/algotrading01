@@ -1,0 +1,8 @@
+Bittrex History Data API
+
+https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName=USDT-BTC&tickInterval=thirtyMin&_=1499127220008
+
+
+Poloniex Historical Data API
+
+https://poloniex.com/public?command=returnTradeHistory&currencyPair=BTC_ETH&start=1506816000&end=1506816500
