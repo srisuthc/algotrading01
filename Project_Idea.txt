@@ -6,3 +6,11 @@ https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName=USDT-BTC&tickInterva
 Poloniex Historical Data API
 
 https://poloniex.com/public?command=returnTradeHistory&currencyPair=BTC_ETH&start=1506816000&end=1506816500
+
+returnChartData
+Returns candlestick chart data. Required GET parameters are "currencyPair", "period" (candlestick period in seconds; valid values are 300, 900, 1800, 7200, 14400, and 86400), "start", and "end". "Start" and "end" are given in UNIX timestamp format and used to specify the date range for the data returned. Sample output:
+
+[{"date":1405699200,"high":0.0045388,"low":0.00403001,"open":0.00404545,"close":0.00427592,"volume":44.11655644,
+"quoteVolume":10259.29079097,"weightedAverage":0.00430015}, ...]
+
+Call: https://poloniex.com/public?command=returnChartData&currencyPair=BTC_XMR&start=1405699200&end=9999999999&period=14400
