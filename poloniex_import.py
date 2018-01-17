@@ -116,18 +116,25 @@ def getBegDate(sPrimary_Currency, sSecondary_Currency,sInterval):
         return pytz.utc.localize(datetime.datetime(2015,1,1))
     else:
         return pytz.utc.localize(dtLastDate)
+
+def import_all(sInterval):
+    path = 'C:\\Users\\Charm Srisuthapan\\Workspace\\Python2\\data_collection1\\'
+    import_list = open(path+'poloniex.conf','r').readlines()
+    for row in import_list:
+        tmp1 = row.replace('\n','').split(',')
+        importAll(tmp1[0],tmp1[1],sInterval)
     
-importAll('USDT','BTC','1800')
-importAll('USDT','BCH','1800')
-importAll('USDT','ETH','1800')
-importAll('USDT','LTC','1800')
-importAll('USDT','XRP','1800')
-importAll('USDT','ZEC','1800')
-importAll('BTC','ETH','1800')
-importAll('BTC','BCH','1800')
-importAll('BTC','LTC','1800')
-importAll('BTC','XRP','1800')
-importAll('BTC','ZEC','1800')
-importAll('ETH','BCH','1800')
-importAll('ETH','ZEC','1800')
+#importAll('USDT','BTC','1800')
+#importAll('USDT','BCH','1800')
+#importAll('USDT','ETH','1800')
+#importAll('USDT','LTC','1800')
+#importAll('USDT','XRP','1800')
+#importAll('USDT','ZEC','1800')
+#importAll('BTC','ETH','1800')
+#importAll('BTC','BCH','1800')
+#importAll('BTC','LTC','1800')
+#importAll('BTC','XRP','1800')
+#importAll('BTC','ZEC','1800')
+#importAll('ETH','BCH','1800')
+#importAll('ETH','ZEC','1800')
 

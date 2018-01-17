@@ -10,8 +10,6 @@ import hashlib
 import hmac
 import time
 import requests
-
-
 import ccxt
 import json
 import MySQLdb
@@ -30,23 +28,13 @@ def insert_bittrex(Primary_Currency, Secondary_Currency, Interval, data1):
     sBV = data1['BV']
     sV = data1['V']
     
-    sQuery = """INSERT INTO bittrex.bittrex_historical (primary_currency,secondary_currency"""
-    sQuery += ",close_dt,tz,tickinterval,open_price,high_price,low_price,close_price,volume,base_volume) VALUES ("
-    sQuery += "'"+Primary_Currency+"','"+Secondary_Currency+"','"
-    sQuery += sTime + "','UTC','"+Interval+"',"
-    sQuery += str(sOpen) + ","
-    sQuery += str(sHigh) + ","
-    sQuery += str(sLow) + ","
-    sQuery += str(sClose) + ","
-    sQuery += str(sV) + ","
-    sQuery += str(sBV) + ") "
-    sQuery += "ON DUPLICATE KEY UPDATE open_price="+str(sOpen)
-    sQuery += ",high_price="+str(sHigh)
-    sQuery += ",low_price="+str(sLow)
-    sQuery += ",close_price="+str(sClose)
-    sQuery += ",volume="+str(sV)
-    sQuery += ",base_volume="+str(sBV)+";"
-    
+    sQuery = ("INSERT INTO bittrex.bittrex_historical (primary_currency,secondary_currency"+\
+              ",close_dt,tz,tickinterval,open_price,high_price,low_price,"+\
+              "close_price,volume,base_volume) VALUES ('%s','%s'," % (Primary_Currency, Secondary_Currency)+\
+              "'%s','UTC','%s'," % (sTime,Interval)+\
+              "%s,%s,%s,%s,%s,%s)" % (sOpen,sHigh,sLow,sClose,sV,sBV)+\
+              "ON DUPLICATE KEY UPDATE open_price=%s,high_price=%s,low_price=%s,close_price=%s" % (sOpen,sHigh,sLow,sClose)+\
+              ",volume=%s,base_volume=%s;" % (sV,sBV)) 
     #print sQuery
     try:
         c.execute(sQuery)
@@ -55,10 +43,9 @@ def insert_bittrex(Primary_Currency, Secondary_Currency, Interval, data1):
         db.rollback()
 
 def import_bittrex(sPrimary_Currency, sSecondary_Currency, sInterval):
-    sRequestURL = 'https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName='
-    sRequestURL += sPrimary_Currency+'-'
-    sRequestURL += sSecondary_Currency
-    sRequestURL += '&tickInterval='+sInterval 
+    sRequestURL = ('https://bittrex.com/Api/v2.0/pub/market/GetTicks?'+\
+                   'marketName=%s-%s&tickInterval=%s'   
+                  % (sPrimary_Currency, sSecondary_Currency, sInterval))
     response = requests.get(sRequestURL)
     data = response.json()
     for i in range (0,len(data['result'])-1,1):
@@ -66,19 +53,10 @@ def import_bittrex(sPrimary_Currency, sSecondary_Currency, sInterval):
     time.sleep(1)    
     print sPrimary_Currency+"/"+sSecondary_Currency+" imported"
     
-
-import_bittrex('USDT','BTC','thirtyMin')
-import_bittrex('USDT','BCC','thirtyMin')
-import_bittrex('USDT','ETH','thirtyMin')
-import_bittrex('USDT','LTC','thirtyMin')
-import_bittrex('USDT','XRP','thirtyMin')
-import_bittrex('USDT','ZEC','thirtyMin')
-import_bittrex('BTC','ETH','thirtyMin')
-import_bittrex('BTC','BCC','thirtyMin')
-import_bittrex('BTC','LTC','thirtyMin')
-import_bittrex('BTC','XRP','thirtyMin')
-import_bittrex('BTC','ZEC','thirtyMin')
-import_bittrex('ETH','BCC','thirtyMin')
-import_bittrex('ETH','LTC','thirtyMin')
-import_bittrex('ETH','XRP','thirtyMin')
-import_bittrex('ETH','ZEC','thirtyMin')
+def import_all(sInterval):
+    path = 'C:\\Users\\Charm Srisuthapan\\Workspace\\Python2\\data_collection1\\'
+    import_list = open(path+'bittrex.conf','r').readlines()
+    for row in import_list:
+        tmp1 = row.replace('\n','').split(',')
+        import_bittrex(tmp1[0],tmp1[1],sInterval)
+#import_bittrex('USDT','BTC','thirtyMin')
